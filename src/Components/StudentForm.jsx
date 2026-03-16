@@ -1,112 +1,47 @@
-import { useState } from "react";
-import "./StudentForm.css";
+import { useForm } from "react-hook-form";
 
 function StudentForm() {
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    course: ""
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
 
-  const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-
-    validate(name, value);
-  };
-
-  const validate = (name, value) => {
-
-    let newErrors = { ...errors };
-
-    if (name === "name") {
-      newErrors.name = value ? "" : "Name is required";
-    }
-
-    if (name === "email") {
-      if (!value) {
-        newErrors.email = "Email is required";
-      } else if (!/\S+@\S+\.\S+/.test(value)) {
-        newErrors.email = "Invalid email format";
-      } else {
-        newErrors.email = "";
-      }
-    }
-
-    if (name === "course") {
-      newErrors.course = value ? "" : "Course is required";
-    }
-
-    setErrors(newErrors);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
+    console.log(data);
     alert("Student Registered!");
   };
 
-  const isFormValid =
-    formData.name &&
-    formData.email &&
-    formData.course &&
-    !errors.name &&
-    !errors.email &&
-    !errors.course;
-
   return (
-    <div className="form-container">
+    <form onSubmit={handleSubmit(onSubmit)}>
 
-      <h2>Student Registration</h2>
+      <div>
+        <label>Name</label>
+        <input {...register("name", { required: true })} />
+        {errors.name && <p>Name is required</p>}
+      </div>
 
-      <form onSubmit={handleSubmit} className="student-form">
+      <div>
+        <label>Email</label>
+        <input
+          {...register("email", {
+            required: true,
+            pattern: /^\S+@\S+$/i
+          })}
+        />
+        {errors.email && <p>Valid email required</p>}
+      </div>
 
-        <div className="form-group">
-          <label>Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-          {errors.name && <p className="error">{errors.name}</p>}
-        </div>
+      <div>
+        <label>Course</label>
+        <input {...register("course", { required: true })} />
+        {errors.course && <p>Course is required</p>}
+      </div>
 
-        <div className="form-group">
-          <label>Email</label>
-          <input
-            type="text"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          {errors.email && <p className="error">{errors.email}</p>}
-        </div>
+      <button type="submit">Submit</button>
 
-        <div className="form-group">
-          <label>Course</label>
-          <input
-            type="text"
-            name="course"
-            value={formData.course}
-            onChange={handleChange}
-          />
-          {errors.course && <p className="error">{errors.course}</p>}
-        </div>
-
-        <button type="submit" disabled={!isFormValid}>
-          Register Student
-        </button>
-
-      </form>
-
-    </div>
+    </form>
   );
 }
 

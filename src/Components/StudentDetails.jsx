@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import "./StudentDetails.css";
+import "../StudentDetails.css";
 
 function StudentDetails() {
 
