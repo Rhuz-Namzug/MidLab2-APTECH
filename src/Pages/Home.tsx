@@ -1,9 +1,10 @@
-import StudentList from "../components/StudentList";
 import { useState } from "react";
+import StudentList from "../components/StudentList";
+import { Student } from "../types/Student";
 
 function Home() {
 
-  const [students] = useState([
+  const [students] = useState<Student[]>([
     { id: 1, name: "Rhuzl", email: "Rhuzl@gmail.com", course: "IT" },
     { id: 2, name: "Cyrus", email: "Cyrus@gmail.com", course: "CS" }
   ]);
@@ -17,3 +18,6 @@ function Home() {
 }
 
 export default Home;
+
+
+
